@@ -35,7 +35,15 @@ class MainActivity : AppCompatActivity() {
     class SampleCallListener : NetworkUtil.ResultListener() {
         override fun onSuccess(responseBody: ResponseBody?) {
             super.onSuccess(responseBody)
-            LogUtil.debug(responseBody?.string())            
+            responseBody?.string()?.takeIf {
+                it.isNotEmpty()
+            }?.let {
+                JiraIssue(it!!)
+            }?.also {
+                doInMainThread {
+                    LogUtil.debug(it)
+                }
+            }
         }
     }
 
